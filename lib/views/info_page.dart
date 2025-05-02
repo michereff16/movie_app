@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movie_app/view_models/movie_details_view_model.dart';
 import 'package:provider/provider.dart';
-import '../view_models/movie_details_view_model.dart';
 
 class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
@@ -116,16 +116,16 @@ class InfoPage extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          _buildRating(movie.rating, movie.votes),
+                          _buildRating(movie.voteAverage, movie.voteCount),
                           const SizedBox(height: 16),
                           _buildGenres(movie.genres),
                           const SizedBox(height: 24),
-                          _buildSummarySection(movie.summary),
+                          _buildSummarySection(movie.overview),
                           const SizedBox(height: 24),
                           _buildDetailsSection(
                             movie.releaseDate,
                             movie.country,
-                            movie.budget,
+                            movie.budget.toString(),
                           ),
                           const SizedBox(height: 34),
                           _buildOfficialPageButton(context),
@@ -203,7 +203,7 @@ class InfoPage extends StatelessWidget {
         FaIcon(FontAwesomeIcons.solidStar, color: Colors.amber, size: 24),
         const SizedBox(width: 8),
         Text(
-          rating.toString(),
+          rating.toString().substring(0, 3),
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,

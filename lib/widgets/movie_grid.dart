@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/movie.dart';
+import 'package:movie_app/models/movie.dart';
 
 class MovieGrid extends StatelessWidget {
   final List<Movie> movies;
@@ -44,7 +45,16 @@ class MovieGrid extends StatelessWidget {
                   width: double.infinity,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset('assets/movie.png', fit: BoxFit.fill),
+                    child: CachedNetworkImage(
+                      imageUrl: movie.posterUrl,
+                      fit: BoxFit.fill,
+                      placeholder:
+                          (context, url) =>
+                              const Center(child: CircularProgressIndicator()),
+                      errorWidget:
+                          (context, url, error) => const Icon(Icons.error),
+                      filterQuality: FilterQuality.low,
+                    ),
                   ),
                 ),
 
@@ -67,7 +77,7 @@ class MovieGrid extends StatelessWidget {
                         FaIcon(FontAwesomeIcons.solidStar, size: 12),
                         const SizedBox(width: 4),
                         Text(
-                          movie.rating.toString(),
+                          movie.popularity.toString().substring(0, 3),
                           style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -102,7 +112,7 @@ class MovieGrid extends StatelessWidget {
                   border: Border.all(color: const Color(0xFFC60385), width: 1),
                 ),
                 child: Text(
-                  movie.rating.toString(),
+                  movie.voteAverage.toString().substring(0, 3),
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -112,7 +122,7 @@ class MovieGrid extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '${movie.votes} votos',
+                '${movie.voteCount} votos',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 10,

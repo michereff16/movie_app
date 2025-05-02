@@ -1,10 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:movie_app/view_models/home_view_model.dart';
+import 'package:movie_app/view_models/movie_details_view_model.dart';
+import 'package:movie_app/widgets/featured_carousel.dart';
+import 'package:movie_app/widgets/movie_grid.dart';
 import 'package:provider/provider.dart';
-import '../view_models/home_view_model.dart';
-import '../view_models/movie_details_view_model.dart';
-import '../widgets/featured_carousel.dart';
-import '../widgets/movie_grid.dart';
 import 'info_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gradient_borders/gradient_borders.dart';

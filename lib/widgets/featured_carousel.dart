@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/widgets/neon_painter.dart';
-import '../models/movie.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class FeaturedCarousel extends StatefulWidget {
@@ -55,9 +56,16 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(9),
-                        child: Image.asset(
-                          'assets/movie.png',
+                        child: CachedNetworkImage(
+                          imageUrl: widget.movies[index].posterUrl,
                           fit: BoxFit.fill,
+                          placeholder:
+                              (context, url) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          errorWidget:
+                              (context, url, error) => const Icon(Icons.error),
+                          filterQuality: FilterQuality.low,
                         ),
                       ),
                     ),
