@@ -44,7 +44,6 @@ class ApiService {
   }
 
   Future<List<Movie>> getMovieList(String endpoint, {int page = 1}) async {
-    debugPrint('getMovieList');
     try {
       final data = await get(
         endpoint,
@@ -63,7 +62,6 @@ class ApiService {
   }
 
   Future<Movie> getMovieDetails(int movieId) async {
-    debugPrint('==============ENTROU AQUI==============');
     try {
       final data = await get('${ApiConstants.movieDetailsEndpoint}$movieId');
 

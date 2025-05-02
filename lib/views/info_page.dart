@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
@@ -21,7 +22,7 @@ class InfoPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          _buildMoviePoster(context, movie.ageRating),
+          _buildMoviePoster(context, movie.backdropUrl),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -143,7 +144,7 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildMoviePoster(BuildContext context, String? ageRating) {
+  Widget _buildMoviePoster(BuildContext context, String movieBackdrop) {
     return Stack(
       children: [
         // Movie poster image
@@ -151,7 +152,15 @@ class InfoPage extends StatelessWidget {
           height: MediaQuery.of(context).size.height * 0.45,
           width: double.infinity,
           color: Colors.white10,
-          child: const Center(child: Text('Movie Poster')),
+          child: CachedNetworkImage(
+            imageUrl: movieBackdrop,
+            fit: BoxFit.cover,
+            placeholder:
+                (context, url) =>
+                    const Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
+            filterQuality: FilterQuality.high,
+          ),
         ),
 
         // Back button
