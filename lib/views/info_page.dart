@@ -19,6 +19,8 @@ class InfoPage extends StatelessWidget {
 
     final movie = viewModel.movie!;
 
+    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       body: Column(
         children: [
@@ -102,9 +104,13 @@ class InfoPage extends StatelessWidget {
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              Text(
-                                movie.originalTitle ?? 'Título original',
-                                style: const TextStyle(color: Colors.white70),
+                              SizedBox(
+                                width: size.width * 0.77,
+                                child: Text(
+                                  movie.originalTitle ?? 'Título original',
+                                  overflow: TextOverflow.clip,
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
                               ),
                               const Text(
                                 ' • ',
