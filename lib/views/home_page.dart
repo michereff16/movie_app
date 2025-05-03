@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:movie_app/constants/api_constants.dart';
+import 'package:movie_app/services/api_service.dart';
 import 'package:movie_app/services/locale.dart';
 import 'package:movie_app/view_models/home_view_model.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
@@ -152,12 +154,13 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (selected) {
                         setState(() {
                           _selectedLanguage = selected!;
+
+                          if (_selectedLanguage == 'Português') {
+                            localeProvider.setLocale(const Locale('pt'));
+                          } else {
+                            localeProvider.setLocale(const Locale('en'));
+                          }
                         });
-                        final newLocale =
-                            currentLocale.languageCode == 'en'
-                                ? const Locale('pt', 'BR')
-                                : const Locale('en');
-                        localeProvider.setLocale(newLocale);
                       },
                     ),
                   ),
