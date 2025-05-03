@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movie_app/models/movie.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MovieGrid extends StatelessWidget {
   final List<Movie> movies;
@@ -122,7 +123,7 @@ class MovieGrid extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                '${movie.voteCount} votos',
+                '${movie.voteCount} ${AppLocalizations.of(context)!.votes}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 10,

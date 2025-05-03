@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:movie_app/services/locale.dart';
 import 'package:movie_app/view_models/home_view_model.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
 import 'package:movie_app/widgets/featured_carousel.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'info_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gradient_borders/gradient_borders.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,6 +30,9 @@ class _HomePageState extends State<HomePage> {
       context,
       listen: false,
     );
+
+    final localeProvider = Provider.of<LocaleProvider>(context);
+    final currentLocale = localeProvider.locale ?? const Locale('pt');
 
     return Scaffold(
       extendBody: true,
@@ -75,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Column(
                       children: [
-                        _buildAppBar(),
+                        _buildAppBar(localeProvider, currentLocale),
                         FeaturedCarousel(
                           movies: viewModel.featuredMovies,
                           onMovieTap: (movie) {
@@ -112,7 +117,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(LocaleProvider localeProvider, Locale currentLocale) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
@@ -121,8 +126,8 @@ class _HomePageState extends State<HomePage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Idioma',
+              Text(
+                AppLocalizations.of(context)!.language,
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
@@ -148,6 +153,11 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           _selectedLanguage = selected!;
                         });
+                        final newLocale =
+                            currentLocale.languageCode == 'en'
+                                ? const Locale('pt', 'BR')
+                                : const Locale('en');
+                        localeProvider.setLocale(newLocale);
                       },
                     ),
                   ),
@@ -167,9 +177,19 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          _buildTabButton(context, 0, 'Nos cinemas', viewModel),
+          _buildTabButton(
+            context,
+            0,
+            AppLocalizations.of(context)!.nowPlaying,
+            viewModel,
+          ),
           const SizedBox(width: 16),
-          _buildTabButton(context, 1, 'Em breve', viewModel),
+          _buildTabButton(
+            context,
+            1,
+            AppLocalizations.of(context)!.upcoming,
+            viewModel,
+          ),
         ],
       ),
     );

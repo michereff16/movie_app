@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InfoPage extends StatelessWidget {
   const InfoPage({super.key});
@@ -102,34 +103,39 @@ class InfoPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: size.width * 0.77,
-                                child: Text(
+                          SizedBox(
+                            width: size.width * 0.92,
+                            child: Row(
+                              children: [
+                                Text(
                                   movie.originalTitle ?? 'Título original',
                                   overflow: TextOverflow.clip,
                                   style: const TextStyle(color: Colors.white70),
                                 ),
-                              ),
-                              const Text(
-                                ' • ',
-                                style: TextStyle(color: Colors.white70),
-                              ),
-                              Text(
-                                movie.year ?? '2024',
-                                style: const TextStyle(color: Colors.white70),
-                              ),
-                            ],
+                                const Text(
+                                  ' • ',
+                                  style: TextStyle(color: Colors.white70),
+                                ),
+                                Text(
+                                  movie.year,
+                                  style: const TextStyle(color: Colors.white70),
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 8),
-                          _buildRating(movie.voteAverage, movie.voteCount),
+                          _buildRating(
+                            context,
+                            movie.voteAverage,
+                            movie.voteCount,
+                          ),
                           const SizedBox(height: 16),
                           _buildGenres(movie.genres),
                           const SizedBox(height: 24),
-                          _buildSummarySection(movie.overview),
+                          _buildSummarySection(context, movie.overview),
                           const SizedBox(height: 24),
                           _buildDetailsSection(
+                            context,
                             movie.releaseDate,
                             movie.country,
                             movie.budget.toString(),
@@ -212,7 +218,7 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRating(double rating, int votes) {
+  Widget _buildRating(BuildContext ctx, double rating, int votes) {
     return Row(
       children: [
         FaIcon(FontAwesomeIcons.solidStar, color: Colors.amber, size: 24),
@@ -226,7 +232,10 @@ class InfoPage extends StatelessWidget {
           ),
         ),
         const SizedBox(width: 8),
-        Text('$votes votos', style: const TextStyle(color: Colors.white70)),
+        Text(
+          '$votes ${AppLocalizations.of(ctx)!.votes}',
+          style: const TextStyle(color: Colors.white70),
+        ),
       ],
     );
   }
@@ -242,12 +251,12 @@ class InfoPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSummarySection(String? summary) {
+  Widget _buildSummarySection(BuildContext ctx, String? summary) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Resumo',
+        Text(
+          AppLocalizations.of(ctx)!.overview,
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w700,
@@ -261,6 +270,7 @@ class InfoPage extends StatelessWidget {
   }
 
   Widget _buildDetailsSection(
+    BuildContext ctx,
     String? releaseDate,
     String? country,
     String? budget,
@@ -271,8 +281,8 @@ class InfoPage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Data lançamento',
+            Text(
+              AppLocalizations.of(ctx)!.releaseDate,
               style: TextStyle(color: Colors.white70, fontSize: 10),
             ),
             const SizedBox(height: 4),
@@ -289,8 +299,8 @@ class InfoPage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'País de origem',
+            Text(
+              AppLocalizations.of(ctx)!.countryOfOrigin,
               style: TextStyle(color: Colors.white70, fontSize: 10),
             ),
             const SizedBox(height: 4),
@@ -307,8 +317,8 @@ class InfoPage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Orçamento',
+            Text(
+              AppLocalizations.of(ctx)!.budget,
               style: TextStyle(color: Colors.white70, fontSize: 10),
             ),
             const SizedBox(height: 4),
@@ -343,7 +353,7 @@ class InfoPage extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            'Página oficial',
+            AppLocalizations.of(context)!.officialPage,
             style: TextStyle(
               color: Colors.white,
               fontSize: 16,
