@@ -1,0 +1,30 @@
+flutter_native_splash:
+# Só funciona no parelho físico, não funciona no emulador.
+  color: "#683ab7"
+  image: assets/logo.png
+  image_dark: assets/logo.png
+
+  android_12:
+      color: "#683ab7"
+      image: assets/logo.png
+      image_dark: assets/logo.png
+ 
+  android: true
+  ios: true
+  web: false
+  fullscreen: true
+
+
+
+
+# flutter_native_splash:
+#   android: true
+#   ios: true
+#   web: false
+
+#   color: "#18143c"
+#   image: assets/logo.png
+  
+#   android_12:
+#     color: "#18143c"
+#     image: assets/logo.png

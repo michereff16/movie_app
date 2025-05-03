@@ -74,7 +74,7 @@ class _FeaturedCarouselState extends State<FeaturedCarousel> {
               ),
           options: CarouselOptions(
             height: size.height * 0.316,
-            autoPlay: false,
+            autoPlay: true,
             enlargeCenterPage: true,
             enlargeFactor: 0.2,
             viewportFraction: 0.49,

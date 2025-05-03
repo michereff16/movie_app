@@ -8,9 +8,11 @@ import 'view_models/movie_details_view_model.dart';
 import 'views/home_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
@@ -26,8 +28,26 @@ void main() {
   );
 }
 
-class MovieApp extends StatelessWidget {
+class MovieApp extends StatefulWidget {
   const MovieApp({super.key});
+
+  @override
+  State<MovieApp> createState() => _MovieAppState();
+}
+
+class _MovieAppState extends State<MovieApp> {
+  @override
+  void initState() {
+    super.initState();
+    initialization();
+  }
+
+  void initialization() async {
+    debugPrint('==pausing...');
+    await Future.delayed(const Duration(seconds: 3));
+    debugPrint('==unpausing...');
+    FlutterNativeSplash.remove();
+  }
 
   @override
   Widget build(BuildContext context) {
