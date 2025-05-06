@@ -63,7 +63,7 @@ class Movie {
     return releaseDate!;
   }
 
-  String get ageRating => 'N/A'; // This would come from a separate API call
+  String get ageRating => 'N/A';
 
   String get country =>
       originalLanguage == 'en'
@@ -97,12 +97,10 @@ class Movie {
           json['popularity'] != null
               ? (json['popularity'] as num).toDouble()
               : null,
-      // These fields are only available in detailed movie responses
       status: json['status'],
       budget: json['budget'],
       revenue: json['revenue'],
       runtime: json['runtime'],
-      // Genres need special handling as they come as objects in detailed responses
       genres:
           json['genres'] != null
               ? (json['genres'] as List)

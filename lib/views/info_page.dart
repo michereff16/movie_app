@@ -323,7 +323,7 @@ class InfoPage extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              budget ?? 'U\$ 120000',
+              budget ?? 'N/A',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 14,

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/constants/api_constants.dart';
 import 'package:movie_app/models/movie.dart';
@@ -11,7 +11,7 @@ class ApiService {
 
   Uri _buildUri(String endpoint, Map<String, dynamic>? queryParams) {
     final params = {
-      ApiConstants.apiKeyParam: ApiConstants.apiKey,
+      ApiConstants.apiKeyParam: dotenv.env['API_KEY'],
       ApiConstants.languageParam: ApiConstants.defaultLanguage,
       ...?queryParams,
     };
