@@ -136,9 +136,9 @@ class InfoPage extends StatelessWidget {
                           const SizedBox(height: 24),
                           _buildDetailsSection(
                             context,
-                            movie.releaseDate,
+                            movie.formattedReleaseDate,
                             movie.country,
-                            movie.budget.toString(),
+                            movie.formattedBudget.toString(),
                           ),
                           const SizedBox(height: 34),
                           _buildOfficialPageButton(context),

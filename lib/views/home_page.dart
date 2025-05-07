@@ -1,7 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:movie_app/constants/api_constants.dart';
-import 'package:movie_app/services/api_service.dart';
 import 'package:movie_app/services/locale.dart';
 import 'package:movie_app/view_models/home_view_model.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
