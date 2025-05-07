@@ -1,15 +1,18 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:movie_app/widgets/app_bar.dart';
+import 'package:provider/provider.dart';
+
 import 'package:movie_app/services/locale.dart';
 import 'package:movie_app/view_models/home_view_model.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
 import 'package:movie_app/widgets/featured_carousel.dart';
 import 'package:movie_app/widgets/movie_grid.dart';
-import 'package:provider/provider.dart';
+import 'package:movie_app/widgets/tab_bar.dart';
+
 import 'info_page.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gradient_borders/gradient_borders.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,9 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _selectedLanguage = 'Português';
-  final List<String> _languages = ['English', 'Português'];
-
   @override
   Widget build(BuildContext context) {
     // Access the ViewModel
@@ -80,7 +80,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Column(
                       children: [
-                        _buildAppBar(localeProvider, currentLocale),
+                        AppBarWidget(
+                          localeProvider: localeProvider,
+                          currentLocale: currentLocale,
+                        ),
                         FeaturedCarousel(
                           movies: viewModel.featuredMovies,
                           onMovieTap: (movie) {
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        _buildTabBar(context, viewModel),
+                        TabBarWidget(viewModel: viewModel),
                         Expanded(
                           child: MovieGrid(
                             movies: viewModel.currentTabMovies,
@@ -113,131 +116,6 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-      ),
-    );
-  }
-
-  Widget _buildAppBar(LocaleProvider localeProvider, Locale currentLocale) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context)!.language,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Image.asset('assets/location.png', height: 16),
-                  const SizedBox(width: 4),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: _selectedLanguage,
-                      items:
-                          _languages.map((language) {
-                            return DropdownMenuItem<String>(
-                              value: language,
-                              child: Text(language),
-                            );
-                          }).toList(),
-                      onChanged: (selected) {
-                        setState(() {
-                          _selectedLanguage = selected!;
-
-                          if (_selectedLanguage == 'Português') {
-                            localeProvider.setLocale(const Locale('pt'));
-                          } else {
-                            localeProvider.setLocale(const Locale('en'));
-                          }
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Image.asset('assets/profile.png', height: 40),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabBar(BuildContext context, HomeViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildTabButton(
-            context,
-            0,
-            AppLocalizations.of(context)!.nowPlaying,
-            viewModel,
-          ),
-          const SizedBox(width: 16),
-          _buildTabButton(
-            context,
-            1,
-            AppLocalizations.of(context)!.upcoming,
-            viewModel,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTabButton(
-    BuildContext context,
-    int index,
-    String label,
-    HomeViewModel viewModel,
-  ) {
-    final isSelected = viewModel.currentTabIndex == index;
-    return GestureDetector(
-      onTap: () {
-        viewModel.setCurrentTabIndex(index);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? const Color(0xFF3498DB) : Colors.transparent,
-          borderRadius: BorderRadius.circular(4),
-          gradient:
-              isSelected
-                  ? const LinearGradient(
-                    colors: [Color(0xFF0E9FF3), Color(0xFF094B96)],
-                    begin: Alignment.centerLeft,
-                    end: Alignment.centerRight,
-                  )
-                  : null,
-          border:
-              isSelected
-                  ? const GradientBoxBorder(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF005BB0), Color(0xFF0084FF)],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                    ),
-                  )
-                  : null,
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-          ),
-        ),
       ),
     );
   }

@@ -1,9 +1,14 @@
 import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:movie_app/view_models/movie_details_view_model.dart';
+import 'package:movie_app/widgets/details_section.dart';
+import 'package:movie_app/widgets/genres.dart';
+import 'package:movie_app/widgets/official_page_button.dart';
+import 'package:movie_app/widgets/rating.dart';
+import 'package:movie_app/widgets/summary_section.dart';
+import 'package:movie_app/widgets/movie_poster.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -15,7 +20,9 @@ class InfoPage extends StatelessWidget {
     final viewModel = Provider.of<MovieDetailsViewModel>(context);
 
     if (!viewModel.hasMovie) {
-      return const Scaffold(body: Center(child: Text('No movie selected')));
+      return Scaffold(
+        body: Center(child: Text(AppLocalizations.of(context)!.nA)),
+      );
     }
 
     final movie = viewModel.movie!;
@@ -25,7 +32,7 @@ class InfoPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          _buildMoviePoster(context, movie.backdropUrl),
+          MoviePosterWidget(movieBackdrop: movie.backdropUrl),
           Expanded(
             child: Container(
               width: double.infinity,
@@ -108,7 +115,8 @@ class InfoPage extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  movie.originalTitle ?? 'Título original',
+                                  movie.originalTitle ??
+                                      AppLocalizations.of(context)!.nA,
                                   overflow: TextOverflow.clip,
                                   style: const TextStyle(color: Colors.white70),
                                 ),
@@ -124,24 +132,26 @@ class InfoPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          _buildRating(
-                            context,
-                            movie.voteAverage,
-                            movie.voteCount,
+                          RatingWidget(
+                            rating: movie.voteAverage,
+                            votes: movie.voteCount,
                           ),
                           const SizedBox(height: 16),
-                          _buildGenres(movie.genres),
+                          GenresWidget(genres: movie.genres),
                           const SizedBox(height: 24),
-                          _buildSummarySection(context, movie.overview),
+                          SummarySectionWidget(summary: movie.overview),
                           const SizedBox(height: 24),
-                          _buildDetailsSection(
-                            context,
-                            movie.formattedReleaseDate,
-                            movie.country,
-                            movie.formattedBudget.toString(),
+                          DetailsSectionWidget(
+                            releaseDate: movie.formattedReleaseDate,
+                            country: movie.country,
+                            budget: movie.formattedBudget.toString(),
                           ),
                           const SizedBox(height: 34),
-                          _buildOfficialPageButton(context),
+                          OfficialPageButtonWidget(
+                            buttonTitle:
+                                AppLocalizations.of(context)!.officialPage,
+                            officialPageUrl: 'https://www.google.com',
+                          ),
                           const SizedBox(height: 16),
                         ],
                       ),
@@ -152,215 +162,6 @@ class InfoPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildMoviePoster(BuildContext context, String movieBackdrop) {
-    return Stack(
-      children: [
-        // Movie poster image
-        Container(
-          height: MediaQuery.of(context).size.height * 0.45,
-          width: double.infinity,
-          color: Colors.white10,
-          child: CachedNetworkImage(
-            imageUrl: movieBackdrop,
-            fit: BoxFit.cover,
-            placeholder:
-                (context, url) =>
-                    const Center(child: CircularProgressIndicator()),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-            filterQuality: FilterQuality.high,
-          ),
-        ),
-
-        // Back button
-        Positioned(
-          top: MediaQuery.of(context).padding.top + 10,
-          left: 16,
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-                size: 16,
-              ),
-            ),
-          ),
-        ),
-
-        // Play button
-        Positioned.fill(
-          child: Center(
-            child: Container(
-              width: 60,
-              height: 60,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.black45,
-              ),
-              child: const Icon(
-                Icons.play_arrow,
-                color: Colors.white,
-                size: 40,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRating(BuildContext ctx, double rating, int votes) {
-    return Row(
-      children: [
-        FaIcon(FontAwesomeIcons.solidStar, color: Colors.amber, size: 24),
-        const SizedBox(width: 8),
-        Text(
-          rating.toString().substring(0, 3),
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: Colors.white70,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          '$votes ${AppLocalizations.of(ctx)!.votes}',
-          style: const TextStyle(color: Colors.white70),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildGenres(List<String>? genres) {
-    final genreList = genres ?? ['gênero 1', 'gênero 2'];
-    return Text(
-      genreList.join('; '),
-      style: const TextStyle(
-        color: Colors.white70,
-        fontStyle: FontStyle.italic,
-      ),
-    );
-  }
-
-  Widget _buildSummarySection(BuildContext ctx, String? summary) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(ctx)!.overview,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(summary ?? '[...]', style: const TextStyle(color: Colors.white70)),
-      ],
-    );
-  }
-
-  Widget _buildDetailsSection(
-    BuildContext ctx,
-    String? releaseDate,
-    String? country,
-    String? budget,
-  ) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppLocalizations.of(ctx)!.releaseDate,
-              style: TextStyle(color: Colors.white70, fontSize: 10),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              releaseDate ?? '26/02/2024',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              AppLocalizations.of(ctx)!.countryOfOrigin,
-              style: TextStyle(color: Colors.white70, fontSize: 10),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              country ?? 'China',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              AppLocalizations.of(ctx)!.budget,
-              style: TextStyle(color: Colors.white70, fontSize: 10),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              budget ?? 'N/A',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildOfficialPageButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        //Abre link do site oficial
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(18.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          gradient: LinearGradient(
-            colors: [const Color(0xFF3498DB), const Color(0xFF005BB0)],
-          ),
-        ),
-        child: Center(
-          child: Text(
-            AppLocalizations.of(context)!.officialPage,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ),
       ),
     );
   }
