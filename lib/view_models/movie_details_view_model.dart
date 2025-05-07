@@ -3,7 +3,11 @@ import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/services/movie_service.dart';
 
 class MovieDetailsViewModel extends ChangeNotifier {
-  final MovieService _movieService = MovieService();
+  MovieService _movieService = MovieService();
+
+  set movieService(MovieService movieService) {
+    _movieService = movieService;
+  }
 
   Movie? _movie;
   bool _isLoading = false;

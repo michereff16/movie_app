@@ -3,7 +3,11 @@ import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/services/movie_service.dart';
 
 class HomeViewModel extends ChangeNotifier {
-  final MovieService _movieService = MovieService();
+  MovieService _movieService = MovieService();
+
+  set movieService(MovieService movieService) {
+    _movieService = movieService;
+  }
 
   List<Movie> _featuredMovies = [];
   List<Movie> _nowPlayingMovies = [];
@@ -23,8 +27,10 @@ class HomeViewModel extends ChangeNotifier {
       _currentTabIndex == 0 ? _nowPlayingMovies : _comingSoonMovies;
 
   // Constructor
-  HomeViewModel() {
-    _loadMovies();
+  HomeViewModel({bool skipLoading = false}) {
+    if (!skipLoading) {
+      _loadMovies();
+    }
   }
 
   // Methods
@@ -53,7 +59,7 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  void refreshMovies() {
-    _loadMovies();
+  Future<void> refreshMovies() async {
+    await _loadMovies();
   }
 }

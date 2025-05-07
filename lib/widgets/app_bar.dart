@@ -17,10 +17,17 @@ class AppBarWidget extends StatefulWidget {
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
+  String selectedLanguage = 'Português';
+  final List<String> languages = ['English', 'Português'];
+
+  @override
+  void initState() {
+    super.initState();
+    selectedLanguage;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String selectedLanguage = 'Português';
-    final List<String> languages = ['English', 'Português'];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
@@ -45,11 +52,15 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                   DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: selectedLanguage,
+                      borderRadius: BorderRadius.circular(8),
                       items:
                           languages.map((language) {
                             return DropdownMenuItem<String>(
                               value: language,
-                              child: Text(language),
+                              child: Text(
+                                language,
+                                style: TextStyle(fontSize: 14),
+                              ),
                             );
                           }).toList(),
                       onChanged: (selected) {

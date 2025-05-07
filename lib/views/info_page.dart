@@ -29,6 +29,11 @@ class InfoPage extends StatelessWidget {
 
     final Size size = MediaQuery.of(context).size;
 
+    if (!viewModel.hasMovie) {
+      return Scaffold(
+        body: Center(child: Text(AppLocalizations.of(context)!.nA)),
+      );
+    }
     return Scaffold(
       body: Column(
         children: [
